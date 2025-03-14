@@ -64,7 +64,7 @@ if "messages" not in st.session_state:
 
 prompt = PromptTemplate.from_template(
     "Provide only the official stock ticker symbol of {company_name}, including the exchange suffix: "
-    "use '.KS' for KOSPI-listed stocks and '.KQ' for KOSDAQ-listed stocks. "
+    "use '.KS' for KOSPI-listed stocks and '.KQ' for KOSDAQ-listed stocks. NO NEED any suffix if it is nasdaq or sp500 such like apple is APPL "
     "For example, 'Samsung Electronics' should be returned as '005930.KS', "
     "and 'Seojin System' should be returned as '178320.KQ'. No explanations, no extra words."
 )
