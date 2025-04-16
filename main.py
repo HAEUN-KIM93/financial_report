@@ -219,6 +219,7 @@ if search_btn:
             analyze the weakness and advantages in the future not based on the finacial statemtsment i gave analyzing should be written in KOREA.
             """
         )
+        
 
 
 
@@ -260,7 +261,7 @@ if search_btn:
 
         Answer:
         """)
-        chain = combined_prompt | model
+        chain = combined_prompt | model |StrOutputParser()
         search_result = client.search(query=f"{company_name} future strategy and their future plans", max_results=1)
         future_info = search_result["results"][0]["content"]
         report = chain.invoke({
@@ -270,6 +271,7 @@ if search_btn:
         
         # 결과 출력
         st.markdown(response)
+        st.mardown(report)
 
 
 
