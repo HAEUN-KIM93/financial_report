@@ -41,6 +41,9 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
+
+from tavily import TavilyClient
+
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.output_parsers import StructuredOutputParser,ResponseSchema
@@ -53,6 +56,9 @@ st.set_page_config(page_title="재무제표 분석", layout="wide")
 
 # 애플리케이션 제목
 st.title("📊 투자분석 보고서")
+TAVILY_API_KEY = st.secrets["TAVILY_API_KEY"]  # 또는 os.getenv("TAVILY_API_KEY")
+client = TavilyClient(api_key=TAVILY_API_KEY)
+
 
 # 사용자 입력 (주식 심볼 입력)
 with st.sidebar:   
@@ -232,6 +238,34 @@ if search_btn:
             "total_shares": total_shares,
             "stock_price": stock_price,
             "eps": eps
+        })
+        
+        combined_prompt = PromptTemplate.from_template("""
+        You are a financial analyst.
+
+        Given the company's financial report and latest future strategies from web search,
+        analyze the company and describe its current health and future potential.
+
+        Financial Report:
+        {financials}
+
+        Future Strategy (from web search):
+        {future_info}
+
+        Provide a short investor briefing that includes:
+        - Financial strengths and risks
+        - Strategic opportunities or challenges
+        - Market trends
+        - Overall investment outlook
+
+        Answer:
+        """)
+        chain = combined_prompt | model
+        search_result = client.search(query=f"{company_name} future strategy and their future plans", max_results=1)
+        future_info = search_result["results"][0]["content"]
+        report = chain.invoke({
+            "financials": response,
+            "future_info": future_info
         })
         
         # 결과 출력
