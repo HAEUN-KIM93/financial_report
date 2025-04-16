@@ -245,7 +245,7 @@ if search_btn:
         You are a financial analyst.
 
         Given the company's financial report and latest future strategies from web search,
-        analyze the company and describe its current health and future potential.
+        analyze the company and describe its current health and future potential. Please write in korean
 
         Financial Report:
         {financials}
