@@ -271,7 +271,7 @@ if search_btn:
         
         # 결과 출력
         st.markdown(response)
-        st.mardown(report)
+        st.markdown(report)
 
 
 
